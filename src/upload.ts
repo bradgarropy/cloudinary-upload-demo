@@ -1,31 +1,68 @@
 const setupInput = () => {
-    const input = document.querySelector<HTMLInputElement>("#images")
-
-    if (!input) {
-        return
-    }
-
+    const input = document.getElementById("images") as HTMLInputElement
     input.addEventListener("change", handleChange)
 }
 
+const setupForm = () => {
+    const form = document.getElementById("upload") as HTMLFormElement
+    form?.addEventListener("submit", handleSubmit)
+}
+
 const handleChange = async (event: Event) => {
-    if (!event.target) {
+    const preview = document.getElementById("preview") as HTMLParagraphElement
+
+    const {files} = event.target as HTMLInputElement
+
+    if (!files || files.length === 0) {
+        preview.innerHTML = "No images selected yet."
         return
     }
 
-    const target = event.target as HTMLInputElement
-    const files = target.files
-
-    if (!files) {
-        return
-    }
+    const imageList = document.createElement("ul")
 
     for (const file of files) {
-        uploadFile(file)
+        const selectedImage = document.createElement("li")
+        selectedImage.innerHTML = file.name
+        imageList.appendChild(selectedImage)
+        preview.innerHTML = imageList.outerHTML
     }
 }
 
+const handleSubmit = async (event: SubmitEvent) => {
+    event.preventDefault()
+
+    // gather elements
+    const form = event.target as HTMLFormElement
+    const button = form.querySelector("#submit") as HTMLButtonElement
+    const input = form.querySelector("#images") as HTMLInputElement
+    const preview = document.getElementById("preview") as HTMLParagraphElement
+
+    const formData = new FormData(form)
+    const images = formData.getAll("images")
+
+    const promises = images.map(image => uploadFile(image as File))
+
+    // set loading state
+    button.setAttribute("disabled", "true")
+    button.innerText = "Uploading..."
+    input.setAttribute("disabled", "true")
+
+    // wait for uploads
+    await Promise.all(promises)
+
+    // clear loading state
+    button.removeAttribute("disabled")
+    button.innerText = "Upload"
+    input.removeAttribute("disabled")
+
+    // reset form
+    form.reset()
+    preview.innerHTML = "No images selected yet."
+}
+
 const uploadFile = async (file: File) => {
+    console.log(`Uploading ${file.name}...`)
+
     const formData = new FormData()
 
     formData.append("file", file)
@@ -44,4 +81,4 @@ const uploadFile = async (file: File) => {
     console.log(image.url)
 }
 
-export {setupInput}
+export {setupForm, setupInput}

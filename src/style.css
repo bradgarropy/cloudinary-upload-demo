@@ -5,28 +5,27 @@ body {
 
 #app {
     display: grid;
+    grid-template-columns: auto 1fr;
     gap: 3rem;
-    place-content: center;
-    min-height: 100vh;
+    justify-items: top;
+    margin: 5rem;
 }
 
 #upload {
+    display: grid;
+    align-content: start;
 }
 
 #upload label {
-    display: block;
-    border-radius: 1rem;
-    padding: 5rem;
-    font-size: 1.75rem;
-    color: white;
-    background: royalblue;
-    cursor: pointer;
-}
-
-#upload label:hover {
-    opacity: 0.9;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
 #upload input {
-    display: none;
+    margin-bottom: 3rem;
+}
+
+#preview ul {
+    margin: 0;
 }

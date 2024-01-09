@@ -1,5 +1,6 @@
 import "~/src/style.css"
 
-import {setupInput} from "~/src/upload"
+import {setupForm, setupInput} from "~/src/upload"
 
 setupInput()
+setupForm()
