@@ -9,12 +9,14 @@ const setupForm = () => {
 }
 
 const handleChange = async (event: Event) => {
-    const preview = document.getElementById("preview") as HTMLParagraphElement
+    const imagesToUpload = document.getElementById(
+        "imagesToUpload",
+    ) as HTMLParagraphElement
 
     const {files} = event.target as HTMLInputElement
 
     if (!files || files.length === 0) {
-        preview.innerHTML = "No images selected yet."
+        imagesToUpload.innerHTML = "No images selected yet."
         return
     }
 
@@ -24,7 +26,7 @@ const handleChange = async (event: Event) => {
         const selectedImage = document.createElement("li")
         selectedImage.innerHTML = file.name
         imageList.appendChild(selectedImage)
-        preview.innerHTML = imageList.outerHTML
+        imagesToUpload.innerHTML = imageList.outerHTML
     }
 }
 
@@ -35,7 +37,9 @@ const handleSubmit = async (event: SubmitEvent) => {
     const form = event.target as HTMLFormElement
     const button = form.querySelector("#submit") as HTMLButtonElement
     const input = form.querySelector("#images") as HTMLInputElement
-    const preview = document.getElementById("preview") as HTMLParagraphElement
+    const imagesToUpload = document.getElementById(
+        "imagesToUpload",
+    ) as HTMLParagraphElement
 
     const formData = new FormData(form)
     const images = formData.getAll("images")
@@ -57,7 +61,7 @@ const handleSubmit = async (event: SubmitEvent) => {
 
     // reset form
     form.reset()
-    preview.innerHTML = "No images selected yet."
+    imagesToUpload.innerHTML = "No images selected yet."
 }
 
 const uploadFile = async (file: File) => {

@@ -9,8 +9,13 @@
     </head>
 
     <body>
-        <div id="app">
-            <form id="upload" method="post" enctype="multipart/form-data">
+        <div class="layout">
+            <form
+                class="area"
+                id="upload"
+                method="post"
+                enctype="multipart/form-data"
+            >
                 <label for="images">Choose images to upload</label>
 
                 <input
@@ -24,8 +29,12 @@
                 <button id="submit" type="submit">Upload</button>
             </form>
 
-            <div id="preview">
+            <div id="imagesToUpload" class="area">
                 <span>No images selected yet.</span>
+            </div>
+
+            <div id="uploadedImages" class="area">
+                <span>No images uploaded yet.</span>
             </div>
         </div>
 

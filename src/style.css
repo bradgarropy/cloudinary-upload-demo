@@ -3,17 +3,10 @@ body {
     font-family: sans-serif;
 }
 
-#app {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 3rem;
-    justify-items: top;
-    margin: 5rem;
-}
-
 #upload {
     display: grid;
     align-content: start;
+    grid-column: 1 / span 2;
 }
 
 #upload label {
@@ -26,6 +19,20 @@ body {
     margin-bottom: 3rem;
 }
 
-#preview ul {
+#imagesToUpload ul {
     margin: 0;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeate(2, auto);
+    gap: 3rem;
+    margin: 5rem;
+}
+
+.area {
+    border: 0.25rem solid black;
+    border-radius: 1rem;
+    padding: 4rem;
 }
