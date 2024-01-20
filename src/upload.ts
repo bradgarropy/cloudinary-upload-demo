@@ -11,7 +11,10 @@ const setupForm = () => {
 const handleChange = async (event: Event) => {
     const imagesToUpload = document.getElementById(
         "imagesToUpload",
-    ) as HTMLParagraphElement
+    ) as HTMLDivElement
+    const uploadedImages = document.getElementById(
+        "uploadedImages",
+    ) as HTMLDivElement
 
     const {files} = event.target as HTMLInputElement
 
@@ -28,6 +31,8 @@ const handleChange = async (event: Event) => {
         imageList.appendChild(selectedImage)
         imagesToUpload.innerHTML = imageList.outerHTML
     }
+
+    uploadedImages.innerHTML = "No images uploaded yet."
 }
 
 const handleSubmit = async (event: SubmitEvent) => {
@@ -39,7 +44,10 @@ const handleSubmit = async (event: SubmitEvent) => {
     const input = form.querySelector("#images") as HTMLInputElement
     const imagesToUpload = document.getElementById(
         "imagesToUpload",
-    ) as HTMLParagraphElement
+    ) as HTMLDivElement
+    const uploadedImages = document.getElementById(
+        "uploadedImages",
+    ) as HTMLDivElement
 
     const formData = new FormData(form)
     const images = formData.getAll("images")
@@ -52,7 +60,22 @@ const handleSubmit = async (event: SubmitEvent) => {
     input.setAttribute("disabled", "true")
 
     // wait for uploads
-    await Promise.all(promises)
+    const newImages = await Promise.all(promises)
+    console.log(newImages)
+
+    // show uploaded images
+    uploadedImages.innerHTML = ""
+
+    newImages.forEach(image => {
+        const uploadedImage = document.createElement("img")
+
+        uploadedImage.src =
+            image.url.split("/upload/")[0] +
+            "/upload/f_auto,q_auto,w_225/" +
+            image.url.split("/upload/")[1]
+
+        uploadedImages.appendChild(uploadedImage)
+    })
 
     // clear loading state
     button.removeAttribute("disabled")
@@ -83,6 +106,7 @@ const uploadFile = async (file: File) => {
 
     const image = await response.json()
     console.log(image.url)
+    return image
 }
 
 export {setupForm, setupInput}

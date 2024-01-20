@@ -3,6 +3,10 @@ body {
     font-family: sans-serif;
 }
 
+img {
+    max-width: 100%;
+}
+
 #upload {
     display: grid;
     align-content: start;
@@ -26,13 +30,23 @@ body {
 .layout {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeate(2, auto);
+    grid-template-rows: auto 1fr;
     gap: 3rem;
-    margin: 5rem;
+    padding: 5rem;
+    box-sizing: border-box;
+    height: 100dvh;
+    max-width: 120rem;
+    margin: 0 auto;
 }
 
 .area {
     border: 0.25rem solid black;
     border-radius: 1rem;
     padding: 4rem;
+}
+
+.area:has(img) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2rem;
 }
