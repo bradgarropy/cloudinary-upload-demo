@@ -24,11 +24,15 @@ const handleChange = async (event: Event) => {
 const handleSubmit = async (event: SubmitEvent) => {
     event.preventDefault()
 
+    const form = document.getElementById("upload") as HTMLFormElement
+    const formData = new FormData(form)
+    const images = formData.getAll("images")
+
     setLoading()
-    const images = await uploadImages()
+    const uploadedImages = await uploadImages(images as File[])
     clearLoading()
 
-    setUploadedImages(images)
+    setUploadedImages(uploadedImages)
 
     clearForm()
     clearImagesToUpload()

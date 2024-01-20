@@ -50,9 +50,11 @@ const setUploadedImages = (images: Array<{url: string}>) => {
 
 const setLoading = () => {
     const button = document.getElementById("submit") as HTMLButtonElement
+    const input = document.getElementById("images") as HTMLButtonElement
 
     button.setAttribute("disabled", "true")
     button.innerText = "Uploading..."
+    input.setAttribute("disabled", "true")
 }
 
 const clearLoading = () => {

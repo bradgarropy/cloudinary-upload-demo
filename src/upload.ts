@@ -1,9 +1,5 @@
-const uploadImages = async () => {
-    const form = document.getElementById("upload") as HTMLFormElement
-    const formData = new FormData(form)
-    const images = formData.getAll("images")
-
-    const promises = images.map(image => uploadFile(image as File))
+const uploadImages = async (images: File[]) => {
+    const promises = images.map(image => uploadFile(image))
     const uploadedImages = await Promise.all(promises)
 
     return uploadedImages
