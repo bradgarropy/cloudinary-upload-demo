@@ -9,19 +9,51 @@ const setupForm = () => {
 }
 
 const handleChange = async (event: Event) => {
-    const imagesToUpload = document.getElementById(
-        "imagesToUpload",
-    ) as HTMLDivElement
-    const uploadedImages = document.getElementById(
-        "uploadedImages",
-    ) as HTMLDivElement
-
     const {files} = event.target as HTMLInputElement
 
     if (!files || files.length === 0) {
-        imagesToUpload.innerHTML = "No images selected yet."
+        clearImagesToUpload()
         return
     }
+
+    // set images to upload
+    setImagesToUpload(files)
+
+    // clear uploaded images
+    clearUploadedImages()
+}
+
+const handleSubmit = async (event: SubmitEvent) => {
+    event.preventDefault()
+
+    // upload files
+    const form = document.getElementById("upload") as HTMLFormElement
+    const formData = new FormData(form)
+    const images = formData.getAll("images")
+    const promises = images.map(image => uploadFile(image as File))
+
+    // set loading state
+    setLoading()
+
+    // wait for uploads
+    const newImages = await Promise.all(promises)
+    console.log(newImages)
+
+    // show uploaded images
+    setUploadedImages(newImages)
+
+    // clear loading state
+    clearLoading()
+
+    // reset form
+    form.reset()
+    clearImagesToUpload()
+}
+
+const setImagesToUpload = (files: FileList) => {
+    const imagesToUpload = document.getElementById(
+        "imagesToUpload",
+    ) as HTMLDivElement
 
     const imageList = document.createElement("ul")
 
@@ -31,42 +63,32 @@ const handleChange = async (event: Event) => {
         imageList.appendChild(selectedImage)
         imagesToUpload.innerHTML = imageList.outerHTML
     }
-
-    uploadedImages.innerHTML = "No images uploaded yet."
 }
 
-const handleSubmit = async (event: SubmitEvent) => {
-    event.preventDefault()
-
-    // gather elements
-    const form = event.target as HTMLFormElement
-    const button = form.querySelector("#submit") as HTMLButtonElement
-    const input = form.querySelector("#images") as HTMLInputElement
-    const imagesToUpload = document.getElementById(
-        "imagesToUpload",
-    ) as HTMLDivElement
+const clearUploadedImages = () => {
     const uploadedImages = document.getElementById(
         "uploadedImages",
     ) as HTMLDivElement
 
-    const formData = new FormData(form)
-    const images = formData.getAll("images")
+    uploadedImages.innerHTML = "No images uploaded yet."
+}
 
-    const promises = images.map(image => uploadFile(image as File))
+const clearImagesToUpload = () => {
+    const imagesToUpload = document.getElementById(
+        "imagesToUpload",
+    ) as HTMLDivElement
 
-    // set loading state
-    button.setAttribute("disabled", "true")
-    button.innerText = "Uploading..."
-    input.setAttribute("disabled", "true")
+    imagesToUpload.innerHTML = "No images selected yet."
+}
 
-    // wait for uploads
-    const newImages = await Promise.all(promises)
-    console.log(newImages)
+const setUploadedImages = (images: Array<{url: string}>) => {
+    const uploadedImages = document.getElementById(
+        "uploadedImages",
+    ) as HTMLDivElement
 
-    // show uploaded images
     uploadedImages.innerHTML = ""
 
-    newImages.forEach(image => {
+    images.forEach(image => {
         const uploadedImage = document.createElement("img")
 
         uploadedImage.src =
@@ -76,15 +98,24 @@ const handleSubmit = async (event: SubmitEvent) => {
 
         uploadedImages.appendChild(uploadedImage)
     })
+}
 
-    // clear loading state
+const setLoading = () => {
+    const button = document.getElementById("submit") as HTMLButtonElement
+    const input = document.getElementById("images") as HTMLInputElement
+
+    button.setAttribute("disabled", "true")
+    button.innerText = "Uploading..."
+    input.setAttribute("disabled", "true")
+}
+
+const clearLoading = () => {
+    const button = document.getElementById("submit") as HTMLButtonElement
+    const input = document.getElementById("images") as HTMLInputElement
+
     button.removeAttribute("disabled")
     button.innerText = "Upload"
     input.removeAttribute("disabled")
-
-    // reset form
-    form.reset()
-    imagesToUpload.innerHTML = "No images selected yet."
 }
 
 const uploadFile = async (file: File) => {
