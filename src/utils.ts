@@ -1,3 +1,12 @@
+import {Cloudinary} from "@cloudinary/url-gen"
+import {scale} from "@cloudinary/url-gen/actions/resize"
+
+const cld = new Cloudinary({
+    cloud: {
+        cloudName: "bradgarropy",
+    },
+})
+
 const setImagesToUpload = (files: FileList) => {
     const imagesToUpload = document.getElementById(
         "imagesToUpload",
@@ -29,7 +38,7 @@ const clearImagesToUpload = () => {
     imagesToUpload.innerHTML = "No images selected yet."
 }
 
-const setUploadedImages = (images: Array<{url: string}>) => {
+const setUploadedImages = (images: Array<{public_id: string}>) => {
     const uploadedImages = document.getElementById(
         "uploadedImages",
     ) as HTMLDivElement
@@ -37,13 +46,14 @@ const setUploadedImages = (images: Array<{url: string}>) => {
     uploadedImages.innerHTML = ""
 
     images.forEach(image => {
+        const cldImage = cld
+            .image(image.public_id)
+            .format("auto")
+            .quality("auto")
+            .resize(scale().width(225))
+
         const uploadedImage = document.createElement("img")
-
-        uploadedImage.src =
-            image.url.split("/upload/")[0] +
-            "/upload/f_auto,q_auto,w_225/" +
-            image.url.split("/upload/")[1]
-
+        uploadedImage.src = cldImage.toURL()
         uploadedImages.appendChild(uploadedImage)
     })
 }

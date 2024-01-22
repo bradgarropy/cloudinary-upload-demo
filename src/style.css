@@ -49,4 +49,6 @@ img {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 2rem;
+    align-content: start;
+    align-items: center;
 }
