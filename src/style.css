@@ -23,6 +23,19 @@ img {
     margin-bottom: 3rem;
 }
 
+#upload button {
+    padding: 1rem 3rem;
+    border-radius: 0.5rem;
+    background-color: powderblue;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#upload button:hover {
+    background-color: lightblue;
+}
+
 #imagesToUpload ul {
     margin: 0;
 }
